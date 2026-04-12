@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 export default function HomePage() {
@@ -21,7 +19,6 @@ export default function HomePage() {
               Browse Jobs
             </button>
           </Link>
-
           <Link href="/saved">
             <button className="border border-gray-400 px-6 py-3 rounded-full">
               Saved Jobs

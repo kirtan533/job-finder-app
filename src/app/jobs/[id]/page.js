@@ -18,7 +18,18 @@ export default async function JobDetailsPage({ params, searchParams }) {
 
   const job = jobs.find((j) => String(j.id) === String(id));
 
-  if (!job) return <h1>Job Not Found!</h1>;
+  if (!job) {
+    return (
+      <>
+        <Link href="/jobs">
+          <button className="mb-4 text-sm  text-gray-500 hover:underline cursor-pointer">
+            ⬅ Back to jobs
+          </button>
+        </Link>
+        <p>No Jobs Found!</p>
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">

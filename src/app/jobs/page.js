@@ -12,7 +12,6 @@ export default function JobsPage() {
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(10);
 
-  // debounce value
   const debouncedSearch = useDebounce(search, 500);
 
   const { savedJobs, toggleSave } = useSavedJobs();
@@ -43,7 +42,6 @@ export default function JobsPage() {
   if (isLoading) return <p>Loading Jobs...</p>;
   if (error) return <p>Error Fetching Jobs</p>;
 
-  // filter jobs (client-side)
   const filteredJobs = data.filter((job) =>
     job.title.toLowerCase().includes(debouncedSearch.toLowerCase()),
   );
@@ -61,55 +59,58 @@ export default function JobsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filteredJobs.slice(0, visibleCount).map((job) => {
-            const isSaved = savedJobs.some(
-              (j) => String(j.id) === String(job.id),
-            );
-            return (
-              <div
-                className="p-4 sm:p-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition"
-                key={job.id}
-              >
-                <h2 className="text-base sm:text-lg font-semibold text-gray-800">
-                  {job.title}
-                </h2>
-                <p className="text-gray-500 text-sm">{job.company_name}</p>
-                <p className="text-xs sm:text-sm text-gray-400">
-                  {job.candidate_required_location}
-                </p>
+        {filteredJobs.length === 0 ? (
+          <p className="text-center text-gray-500 text-lg mt-6">
+            {" "}
+            ❌ No search match found
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {filteredJobs.slice(0, visibleCount).map((job) => {
+              const isSaved = savedJobs.some(
+                (j) => String(j.id) === String(job.id),
+              );
+              return (
+                <div
+                  className="p-4 sm:p-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition"
+                  key={job.id}
+                >
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-800">
+                    {job.title}
+                  </h2>
+                  <p className="text-gray-500 text-sm">{job.company_name}</p>
+                  <p className="text-xs sm:text-sm text-gray-400">
+                    {job.candidate_required_location}
+                  </p>
 
-                <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                  <Link href={`/jobs/${job.id}?from=jobs`}>
-                    <button className="w-full sm:w-auto bg-black text-white px-4 py-2 rounded-lg">
-                      View
+                  <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                    <Link href={`/jobs/${job.id}?from=jobs`}>
+                      <button className="w-full sm:w-auto bg-black text-white px-4 py-2 rounded-lg cursor-pointer">
+                        View
+                      </button>
+                    </Link>
+
+                    <button
+                      onClick={() => toggleSave(job)}
+                      className={`w-full sm:w-auto px-4 py-2 rounded-lg cursor-pointer ${
+                        isSaved ? "bg-red-100 text-red-600" : "bg-gray-100"
+                      }`}
+                    >
+                      {isSaved ? "Unsave" : "Save"}
                     </button>
-                  </Link>
-
-                  <button
-                    onClick={() => toggleSave(job)}
-                    className={`w-full sm:w-auto px-4 py-2 rounded-lg ${
-                      isSaved ? "bg-red-100 text-red-600" : "bg-gray-100"
-                    }`}
-                  >
-                    {isSaved ? "Unsave" : "Save"}
-                  </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-        {visibleCount < filteredJobs.length ? (
+              );
+            })}
+          </div>
+        )}
+        {visibleCount < filteredJobs.length && (
           <button
             onClick={() => setVisibleCount((prev) => prev + 10)}
-            className="mt-6 sm:mt-8 w-full sm:w-auto mx-auto block bg-black text-white px-6 py-3 rounded-full"
+            className="mt-6 sm:mt-8 w-full sm:w-auto mx-auto block bg-black text-white px-6 py-3 rounded-full cursor-pointer"
           >
             Load More
           </button>
-        ) : (
-          <p className="mt-4 text-gray-600 text-lg justify-self-center">
-            No More Jobs Available!
-          </p>
         )}
       </div>
     </div>

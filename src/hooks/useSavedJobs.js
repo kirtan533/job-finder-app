@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 export default function useSavedJobs() {
@@ -11,14 +12,12 @@ export default function useSavedJobs() {
     setLoaded(true);
   }, []);
 
-  //save to localstorage
   useEffect(() => {
     if (!loaded) return;
     localStorage.setItem("savedJobs", JSON.stringify(savedJobs));
   }, [savedJobs, loaded]);
 
   const toggleSave = (job) => {
-    // saved job object
     const jobData = {
       id: job.id,
       title: job.title,
@@ -29,10 +28,8 @@ export default function useSavedJobs() {
       const exists = prev.some((j) => String(j.id) === String(jobData.id));
 
       if (exists) {
-        //- remove
         return prev.filter((j) => String(j.id) !== String(jobData.id));
       } else {
-        //- add
         return [...prev, jobData];
       }
     });

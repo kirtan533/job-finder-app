@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { FaShoppingBag } from "react-icons/fa";
@@ -11,21 +11,28 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const [user, setUser] = useState(null);
 
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    setUser(stored ? JSON.parse(stored) : null);
+    const checkUser = () => {
+      const stored = localStorage.getItem("user");
+      setUser(stored ? JSON.parse(stored) : null);
+    };
+    checkUser();
+    window.addEventListener("userChanged", checkUser);
+    return () => window.removeEventListener("userChanged", checkUser);
   }, []);
 
   const logout = () => {
     localStorage.removeItem("user");
+    window.dispatchEvent(new Event("userChanged"));
     setUser(null);
     setIsOpen(false);
+    router.push("/login");
   };
 
   return (
     <>
-      {/* 🔥 OVERLAY (mobile) */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 md:hidden"
@@ -33,7 +40,6 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         />
       )}
 
-      {/* 🔥 SIDEBAR */}
       <aside
         className={`fixed top-0 left-0 h-screen w-64 bg-black text-white p-6 flex flex-col
   transform transition-transform duration-300 z-50
@@ -87,14 +93,14 @@ export default function Sidebar({ isOpen, setIsOpen }) {
               <p className="text-sm text-gray-400 mb-2">{user.email}</p>
               <button
                 onClick={logout}
-                className="w-full bg-gray-800 py-2 rounded"
+                className="w-full bg-gray-800 py-2 rounded cursor-pointer"
               >
                 Logout
               </button>
             </>
           ) : (
             <Link href="/login" onClick={() => setIsOpen(false)}>
-              <button className="w-full bg-white text-black py-2 rounded">
+              <button className="w-full bg-white text-black py-2 rounded cursor-pointer">
                 Login
               </button>
             </Link>
