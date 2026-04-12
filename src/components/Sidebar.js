@@ -23,6 +23,30 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     return () => window.removeEventListener("userChanged", checkUser);
   }, []);
 
+  useEffect(() => {
+    if (isOpen) {
+      const scrollY = window.scrollY;
+
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
+    } else {
+      const scrollY = document.body.style.top;
+
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+  }, [isOpen]);
+
   const logout = () => {
     localStorage.removeItem("user");
     window.dispatchEvent(new Event("userChanged"));
@@ -41,7 +65,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       )}
 
       <aside
-        className={`fixed top-0 left-0 h-screen w-64 bg-black text-white p-6 flex flex-col
+        className={`fixed top-0 left-0 h-full w-64 bg-black text-white p-6 flex flex-col
+  overflow-y-auto
   transform transition-transform duration-300 z-50
   ${isOpen ? "translate-x-0" : "-translate-x-full"}
   md:translate-x-0`}
