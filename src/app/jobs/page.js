@@ -47,7 +47,7 @@ export default function JobsPage() {
           <h1 className="text-3xl font-bold mb-6 text-gray-800">
             🚀 Find Your Dream Job
           </h1>
-          <div className="h-10 bg-gray-300 rounded-xl mb-4 animate-pulse"></div>
+          <div className="h-10 bg-gray-200 rounded-xl mb-4 animate-pulse"></div>
           <JobSkeletonGrid />
         </div>
       </div>
