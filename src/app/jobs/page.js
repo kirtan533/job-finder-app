@@ -1,5 +1,6 @@
 "use client";
 
+import JobSkeletonGrid from "@/components/ui/JobSkeletonGrid";
 import useDebounce from "@/hooks/useDebounce";
 import useSavedJobs from "@/hooks/useSavedJobs";
 import { fetchJobs } from "@/libs/fetchJobs";
@@ -39,7 +40,19 @@ export default function JobsPage() {
     }
   }, []);
 
-  if (isLoading) return <p>Loading Jobs...</p>;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-200 p-6">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">
+            🚀 Find Your Dream Job
+          </h1>
+          <div className="h-10 bg-gray-300 rounded-xl mb-4 animate-pulse"></div>
+          <JobSkeletonGrid />
+        </div>
+      </div>
+    );
+  }
   if (error) return <p>Error Fetching Jobs</p>;
 
   const filteredJobs = data.filter((job) =>
