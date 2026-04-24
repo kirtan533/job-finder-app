@@ -4,6 +4,8 @@ import Link from "next/link";
 import useSavedJobs from "@/hooks/useSavedJobs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase/config";
 
 export default function SavedPage() {
   const { savedJobs, toggleSave } = useSavedJobs();
@@ -11,10 +13,12 @@ export default function SavedPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      router.push("/login");
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+      }
+    });
+    return () => unsubscribe();
   }, []);
 
   return (

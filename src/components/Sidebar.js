@@ -1,5 +1,7 @@
 "use client";
 
+import { auth } from "@/firebase/config";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -14,13 +16,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const router = useRouter();
 
   useEffect(() => {
-    const checkUser = () => {
-      const stored = localStorage.getItem("user");
-      setUser(stored ? JSON.parse(stored) : null);
-    };
-    checkUser();
-    window.addEventListener("userChanged", checkUser);
-    return () => window.removeEventListener("userChanged", checkUser);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -47,10 +46,8 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     }
   }, [isOpen]);
 
-  const logout = () => {
-    localStorage.removeItem("user");
-    window.dispatchEvent(new Event("userChanged"));
-    setUser(null);
+  const logout = async () => {
+    await signOut(auth);
     setIsOpen(false);
     router.push("/login");
   };
@@ -115,7 +112,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         <div className="mt-auto">
           {user ? (
             <>
-              <p className="text-sm text-gray-400 mb-2">{user.email}</p>
+              <p className="text-sm text-gray-400 mb-2">{user?.email}</p>
               <button
                 onClick={logout}
                 className="w-full bg-gray-800 py-2 rounded cursor-pointer"
