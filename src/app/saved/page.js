@@ -44,7 +44,6 @@ export default function SavedPage() {
                 </p>
               </div>
             </Link>
-
             <button
               onClick={() => toggleSave(job)}
               className="mt-3 bg-red-100 text-red-600 px-4 py-1 rounded-lg cursor-pointer"

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import JobSkeletonGrid from "@/components/ui/JobSkeletonGrid";
 import { auth } from "@/firebase/config";
 import useDebounce from "@/hooks/useDebounce";
@@ -7,7 +8,6 @@ import useSavedJobs from "@/hooks/useSavedJobs";
 import { fetchJobs } from "@/libs/fetchJobs";
 import { useQuery } from "@tanstack/react-query";
 import { onAuthStateChanged } from "firebase/auth";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
     return () => unsubscribe();
-  });
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user }}>

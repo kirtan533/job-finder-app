@@ -12,7 +12,6 @@ export async function signup(email, password) {
       email,
       password,
     );
-    console.log(`Signup success`);
     return userCredential;
   } catch (error) {
     let message = "Something went wrong";
