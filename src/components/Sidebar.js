@@ -8,12 +8,18 @@ import { useEffect, useState } from "react";
 import { FaHome } from "react-icons/fa";
 import { FaShoppingBag } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
+import { useTheme } from "next-themes";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   const [user, setUser] = useState(null);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const pathname = usePathname();
   const router = useRouter();
+
+  // Hydration fix
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -25,7 +31,6 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   useEffect(() => {
     if (isOpen) {
       const scrollY = window.scrollY;
-
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
       document.body.style.left = "0";
@@ -33,13 +38,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       document.body.style.width = "100%";
     } else {
       const scrollY = document.body.style.top;
-
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.left = "";
       document.body.style.right = "";
       document.body.style.width = "";
-
       if (scrollY) {
         window.scrollTo(0, parseInt(scrollY || "0") * -1);
       }
@@ -52,6 +55,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     router.push("/login");
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <>
       {isOpen && (
@@ -62,11 +69,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       )}
 
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-black text-white p-6 flex flex-col
-  overflow-y-auto
-  transform transition-transform duration-300 z-50
-  ${isOpen ? "translate-x-0" : "-translate-x-full"}
-  md:translate-x-0`}
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-900 dark:bg-gray-950 text-white p-6 flex flex-col
+    overflow-y-auto transform transition-transform duration-300 z-50
+    ${isOpen ? "translate-x-0" : "-translate-x-full"}
+    md:translate-x-0`}
       >
         <h1 className="text-2xl font-bold mb-8">🚀 JobFinder</h1>
 
@@ -83,6 +89,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
               Home
             </span>
           </Link>
+
           <Link
             href="/jobs"
             onClick={() => setIsOpen(false)}
@@ -95,6 +102,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
               Jobs
             </span>
           </Link>
+
           <Link
             href="/saved"
             onClick={() => setIsOpen(false)}
@@ -109,13 +117,27 @@ export default function Sidebar({ isOpen, setIsOpen }) {
           </Link>
         </nav>
 
-        <div className="mt-auto">
+        {/* ---- Dark / Light Toggle ---- */}
+        {mounted && (
+          <button
+            onClick={toggleTheme}
+            className="mt-6 flex items-center gap-3 w-full bg-gray-700 hover:bg-gray-600 dark:bg-gray-800 dark:hover:bg-gray-700 transition rounded p-3 text-white cursor-pointer"
+          >
+            <span className="text-xl">{theme === "dark" ? "☀️" : "🌙"}</span>
+            <span className="text-sm">
+              {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            </span>
+          </button>
+        )}
+
+        {/* ---- User / Auth ---- */}
+        <div className="mt-4">
           {user ? (
             <>
               <p className="text-sm text-gray-400 mb-2">{user?.email}</p>
               <button
                 onClick={logout}
-                className="w-full bg-gray-800 py-2 rounded cursor-pointer"
+                className="w-full bg-gray-700 dark:bg-gray-800 hover:bg-gray-600 dark:hover:bg-gray-700 py-2 rounded cursor-pointer transition text-white"
               >
                 Logout
               </button>

@@ -11,6 +11,8 @@ body {
   scroll-behavior: smooth;
 }
 
+@variant dark (&:where(.dark, .dark *));
+
 @keyframes shimmer {
   0% {
     background-position: -200px 0;

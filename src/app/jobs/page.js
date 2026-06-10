@@ -64,21 +64,20 @@ export default function JobsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-200 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-slate-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-6">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-gray-800">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
           🚀 Find Your Dream Job
         </h1>
         <input
           type="text"
           placeholder="Search jobs..."
-          className="w-full p-3 rounded-xl border border-gray-200 shadow-sm text-sm sm:text-base mb-2"
+          className="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm text-sm sm:text-base mb-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         {filteredJobs.length === 0 ? (
-          <p className="text-center text-gray-500 text-lg mt-6">
-            {" "}
+          <p className="text-center text-gray-500 dark:text-gray-400 text-lg mt-6">
             ❌ No search match found
           </p>
         ) : (
@@ -89,20 +88,22 @@ export default function JobsPage() {
               );
               return (
                 <div
-                  className="p-4 sm:p-5 rounded-2xl bg-white shadow-md hover:shadow-xl transition"
+                  className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition"
                   key={job.id}
                 >
-                  <h2 className="text-base sm:text-lg font-semibold text-gray-800">
+                  <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">
                     {job.title}
                   </h2>
-                  <p className="text-gray-500 text-sm">{job.company_name}</p>
-                  <p className="text-xs sm:text-sm text-gray-400">
+                  <p className="text-gray-500 dark:text-gray-400 text-sm">
+                    {job.company_name}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-400 dark:text-gray-500">
                     {job.candidate_required_location}
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-2 mt-4">
                     <Link href={`/jobs/${job.id}?from=jobs`}>
-                      <button className="w-full sm:w-auto bg-black text-white px-4 py-2 rounded-lg cursor-pointer">
+                      <button className="w-full sm:w-auto bg-black dark:bg-white dark:text-black text-white px-4 py-2 rounded-lg cursor-pointer">
                         View
                       </button>
                     </Link>
@@ -110,7 +111,9 @@ export default function JobsPage() {
                     <button
                       onClick={() => toggleSave(job)}
                       className={`w-full sm:w-auto px-4 py-2 rounded-lg cursor-pointer ${
-                        isSaved ? "bg-red-100 text-red-600" : "bg-gray-100"
+                        isSaved
+                          ? "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300"
+                          : "bg-gray-100 dark:bg-gray-700 dark:text-white"
                       }`}
                     >
                       {isSaved ? "Unsave" : "Save"}
@@ -124,7 +127,7 @@ export default function JobsPage() {
         {visibleCount < filteredJobs.length && (
           <button
             onClick={() => setVisibleCount((prev) => prev + 10)}
-            className="mt-6 sm:mt-8 w-full sm:w-auto mx-auto block bg-black text-white px-6 py-3 rounded-full cursor-pointer"
+            className="mt-6 sm:mt-8 w-full sm:w-auto mx-auto block bg-black dark:bg-white dark:text-black text-white px-6 py-3 rounded-full cursor-pointer"
           >
             Load More
           </button>
