@@ -10,6 +10,15 @@ body {
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
+/* Job description dark mode fix */
+.dark .job-description * {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.dark .job-description a {
+  color: #60a5fa !important;
+}
 
 @variant dark (&:where(.dark, .dark *));
 

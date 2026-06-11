@@ -32,9 +32,11 @@ export default function SignupPage() {
     <div className="flex items-center justify-center min-h-[80vh]">
       <form
         onSubmit={handleSubmit(handleSignup)}
-        className="bg-white p-6 rounded-xl shadow-md w-full max-w-sm"
+        className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-full max-w-sm"
       >
-        <h2 className="text-xl font-bold mb-4">Signup</h2>
+        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+          Signup
+        </h2>
 
         <input
           {...register("email", {
@@ -45,11 +47,14 @@ export default function SignupPage() {
             },
           })}
           placeholder="Email"
-          className="w-full p-2 mb-3 border rounded-lg"
+          className="w-full p-2 mb-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
         />
         {errors.email && (
-          <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mb-2">
+            {errors.email.message}
+          </p>
         )}
+
         <input
           {...register("password", {
             required: "Password required",
@@ -64,11 +69,14 @@ export default function SignupPage() {
           })}
           type="password"
           placeholder="Password"
-          className="w-full p-2 mb-3 border rounded-lg"
+          className="w-full p-2 mb-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
         />
         {errors.password && (
-          <p className="text-red-500 text-sm mb-2">{errors.password.message}</p>
+          <p className="text-red-500 dark:text-red-400 text-sm mb-2">
+            {errors.password.message}
+          </p>
         )}
+
         <input
           {...register("confirmPassword", {
             required: "Confirm your password",
@@ -77,21 +85,23 @@ export default function SignupPage() {
           })}
           type="password"
           placeholder="Confirm Password"
-          className="w-full p-2 mb-4 border rounded-lg"
+          className="w-full p-2 mb-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
         />
         {errors.confirmPassword && (
-          <p className="text-red-500 text-sm mb-2">
+          <p className="text-red-500 dark:text-red-400 text-sm mb-2">
             {errors.confirmPassword.message}
           </p>
         )}
+
         <button
           type="submit"
-          className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 cursor-pointer"
+          className="w-full bg-black dark:bg-white dark:text-black text-white py-2 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 cursor-pointer transition"
         >
           Signup
         </button>
+
         <p
-          className="mt-3 text-sm text-center cursor-pointer text-blue-500"
+          className="mt-3 text-sm text-center cursor-pointer text-blue-500 dark:text-blue-400"
           onClick={() => router.push("/login")}
         >
           Already have an account? Login
